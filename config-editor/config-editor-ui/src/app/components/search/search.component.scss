@@ -1,0 +1,16 @@
+.search-box {
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
+  mat-icon {
+      margin: auto;
+  }
+}
+
+mat-form-field {
+    padding-right: 20px;
+}
+  
+.search-container {
+  flex: 3;
+}

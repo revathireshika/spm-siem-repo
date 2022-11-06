@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="left-panel" *ngIf="configData">
+        <span class="buttons">
+            <div class="left-button">
+                <button mat-raised-button (click)="changeRoute()">Back</button>
+            </div>
+            <div class="right-button" *ngIf="!editorService.metaDataMap.disableEditingFeatures">
+                <button mat-icon-button [disabled]="editorService.configStore.configHistoryService.isHistoryEmpty()" color="primary" title="Undo" (click)="onClickUndoConfig()">
+                    <mat-icon>undo</mat-icon>
+                </button>
+                <button mat-icon-button [disabled]="editorService.configStore.configHistoryService.isFutureEmpty()" color="primary" title="Redo" (click)="onRedoConfig()">
+                    <mat-icon>redo</mat-icon>
+                </button>
+                <button mat-icon-button [disabled]="!editorComponent.form.valid" color="primary" title="Copy Config to Clipboard" (click)="onClickCopy()">
+                    <mat-icon>content_copy</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" title="Paste Config from Clipboard" (click)="onClickPaste()">
+                    <mat-icon>content_paste</mat-icon>
+                </button>
+            </div>
+        </span>
+        <mat-divider class="vert-divider" [vertical]="false"></mat-divider>
+        <ng-scrollbar class="scrollbar" [track]="'all'" [position]="'invertAll'" [appearance]="'standard'">
+            <re-json-tree [json]="configData" [prevKey]="'$'" [copyOnClick]="false"></re-json-tree>
+        </ng-scrollbar>
+    </div>
+    <mat-divider [vertical]="true"></mat-divider>
+    <div class="viewport">
+        <ng-scrollbar class="scrollbar" [track]="'all'">
+            <mat-tab-group [dynamicHeight]="true" (selectedTabChange)="onTabChange()" [(selectedIndex)]="selectedTab">
+                <mat-tab [label]="CONFIG_TAB.name">
+                    <re-generic-editor [field]="field">
+                    </re-generic-editor>
+                </mat-tab>
+                <mat-tab [label]="TESTING_TAB.name" [disabled]="!testingEnabled()">
+                    <re-config-testing [testingType]="testingType">  
+                    </re-config-testing>
+                </mat-tab>
+                <mat-tab [label]="TEST_CASE_TAB.name" [disabled]="!testCaseEnabled()">
+                    <re-test-centre>
+                    </re-test-centre>
+                </mat-tab>
+            </mat-tab-group>
+        </ng-scrollbar>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+.container {
+  font-size: 70%;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 10px 10px;
+  padding-right: 30px;
+  overflow-y: auto;
+}
+
+.button-layout {
+  margin-right: 0px;
+  margin-left: auto;
+}
+
+.mat-header-cell, .mat-cell {
+  padding: 10px;
+}
+
+.scrollbar {
+  --scrollbar-thumb-color: #868686;
+  --scrollbar-thumb-hover-color: #a1a1a1;
+}
+
+.attributes {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.filter {
+  width: 100%;
+}
+
+.bold {
+  color: rgb(62, 216, 255);
+}
+
+.mat-column-service_name {
+  width: 14%;
+}
+.mat-column-application_name {
+  width: 18%;
+}
+.mat-column-id {
+  width: 22%;
+}
+.mat-column-image {
+  width: 28%;
+}
+.mat-column-attributes {
+  width: 10%;
+}
+.mat-column-restart {
+  width: 8%;
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.fixActionRow {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

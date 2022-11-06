@@ -1,0 +1,64 @@
+
+<block-ui>
+    <mat-card>
+        <div *ngIf="(editingTestCase$ | async) === false">
+            <mat-card-title >
+                <h2>Test Suite</h2>
+                <div class="button-group-end">
+                    <button mat-icon-button color="primary" title="Add New Test Case" (click)="onAddTestCase()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary" title="Paste Test Case" (click)="onPasteTestCaseNew()">
+                        <mat-icon>content_paste</mat-icon>
+                    </button>
+                    <button mat-raised-button color="accent" title="Run Test Suite" (click)="onRunTestSuite()"
+                        [disabled]="testCases?.length === 0">Run Test Suite</button>
+                </div>
+            </mat-card-title>
+            <div class="box" *ngFor="let testCase of testCases; index as i">
+                <div class="inline">
+                    <div class="column-fixed" 
+                            [popper]="fileHistory"
+                            [popperTrigger]="'hover'"
+                            [popperPlacement]="'left-start'"
+                            [popperHideOnScroll]="true"
+                            [popperDisableStyle]="true">
+                        <popper-content #fileHistory>
+                            <re-change-history [history]="testCase.fileHistory"></re-change-history>
+                        </popper-content>
+                        <span class="chip-bag">
+                            <span #versionChip class="chip">v{{testCase?.testCase?.version || '0' }}</span>
+                        </span>
+                        <h4 class="author">{{testCase?.testCase?.author}}</h4>
+                    </div>
+                    <mat-divider [vertical]="true"></mat-divider>
+                    <div class="column">
+                        <h3 class="rule-title">{{ testCase?.testCase?.test_case_name }}</h3>
+                        <div class="subtitle">
+                            {{ testCase?.testCase?.description }} Assertions: {{ testCase?.testCase?.assertions?.length }}
+                        </div>
+                    </div>
+                    <div class="right-block">
+                        <div class="button-group-end">
+                            <span class="buttons">
+                                <a (click)="onEditTestCase(i)">
+                                    <mat-icon>edit</mat-icon>
+                                </a>
+                                <a (click)="onCloneTestCase(i)">
+                                    <mat-icon>content_copy</mat-icon>
+                                </a>
+                                <a (click)="onDeleteTestCase(i)">
+                                    <mat-icon>delete</mat-icon>
+                                </a>
+                            </span>
+                            <span>
+                                <re-test-status-badge [testCaseWrapper]="testCase"></re-test-status-badge>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <re-test-case-editor *ngIf="(editingTestCase$ | async)"></re-test-case-editor>
+    </mat-card>
+</block-ui>

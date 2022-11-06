@@ -1,0 +1,98 @@
+<block-ui>
+    <mat-drawer-container autosize>
+        <mat-drawer #drawer mode="side" opened>
+            <ng-scrollbar [track]="'vertical'">
+                <re-checkbox-filters 
+                    [checkboxFilters]="serviceFilterConfig"
+                    [selectedCheckboxes]="serviceFilters$ | async" 
+                    (selectedCheckbox)="onClickCheckbox($event)" 
+                    >
+                </re-checkbox-filters>
+            </ng-scrollbar>
+        </mat-drawer>
+        <mat-drawer-content class="container">
+            <div class="container-title">
+                <a mat-button (click)="drawer.toggle()" *ngIf="serviceFilterConfig">
+                    <mat-icon>menu</mat-icon>
+                </a>
+                <re-search 
+                    [searchTerm]="searchTerm$ | async" 
+                    (searchTermChange)="onSearch($event)"
+                    (saveSearch)="onSaveSearch()"
+                    >
+                </re-search>
+                <div class="add-button">
+                    <a mat-button color="primary" title="Create Config" (click)="onClickCreate()">
+                        <mat-icon>add</mat-icon>
+                    </a>
+                </div>
+                <div *ngIf="!disableEditingFeatures" class="add-button">
+                    <a mat-button color="primary" title="Paste Config from Clipboard" (click)="onClickPaste()">
+                        <mat-icon>content_paste</mat-icon>
+                    </a>
+                </div>
+                <div class="add-button">
+                    <a 
+                        *ngIf="useImporters && (importers$ | async)?.config_importers.length === 1" 
+                        mat-button 
+                        color="primary" 
+                        title="Import Config from Clipboard" 
+                        (click)="onClickImport(0)">
+                        <mat-icon>file_upload</mat-icon>
+                    </a>
+                    <a 
+                        *ngIf="useImporters && (importers$ | async)?.config_importers.length > 1"
+                        mat-button 
+                        [matMenuTriggerFor]="menu" 
+                        color="primary" 
+                        title="Import Config from Clipboard" >
+                        <mat-icon>file_upload</mat-icon>
+                    </a>
+                    <mat-menu #menu="matMenu">
+                        <button 
+                            *ngFor="let importer of (importers$ | async)?.config_importers; index as i;" 
+                            (click)="onClickImport(i)" 
+                            mat-menu-item>
+                            {{importer.importer_name | titlecase}} Importer
+                        </button>
+                        </mat-menu>
+                </div>
+                <span *ngIf="(pullRequestPending$ | async).pull_request_pending === false && (releaseSubmitInFlight$ | async) === false; else prMessage">
+                    <button [disabled]="(countChangesInRelease$ | async) === 0" class="button" mat-raised-button color="accent" title="Release Configs in PR" (click)="onRelease()">
+                        RELEASE PR ({{ countChangesInRelease$ | async }})
+                    </button>
+                </span>
+                <ng-template #prMessage>
+                    <span style="width: 400px">
+                        <a mat-button 
+                            color="accent" 
+                            style="padding: 0"
+                            *ngIf="(pullRequestPending$ | async).pull_request_url !== undefined" 
+                            href="{{(pullRequestPending$ | async)?.pull_request_url}}"
+                            rel="noopener noreferrer"
+                            target="_blank">PR for release pending</a>
+                        <button class="refresh-button" mat-button color="accent" title="sync with git" (click)="onSyncWithGit()">
+                            <mat-icon>refresh</mat-icon>
+                        </button>
+                    </span>
+                </ng-template>
+            </div>
+            <re-search-history [searchHistory]="searchHistory" (searchDeletion)="onDeleteSearch($event)"></re-search-history>
+            <ag-grid-angular
+                #agGrid
+                id="myGrid"
+                class="ag-theme-alpine-dark"
+                [columnDefs]="columnDefs"
+                [context]="context"
+                [defaultColDef]="defaultColDef"
+                [rowData]="(rowData$ | async)"
+                [gridOptions]="gridOptions"
+                [getRowId]="getRowId"
+                (gridReady)="onGridReady($event)"
+            ></ag-grid-angular>
+            <p class="grid-footer ag-theme-alpine-dark">
+                Filtered: {{ api?.getDisplayedRowCount()}}
+            </p>
+        </mat-drawer-content> 
+    </mat-drawer-container>
+</block-ui>

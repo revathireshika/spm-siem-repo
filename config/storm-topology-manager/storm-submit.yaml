@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: --name--
+  namespace: --namespace--
+spec:
+  ttlSecondsAfterFinished: 5
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - env:
+            - name: NIMBUS_SEEDS
+              value: '--nimbus--'
+          args: --args--
+          image: --image--
+          name: --name--
+          resources:
+            requests:
+              memory: "64Mi"
+            limits:
+              memory: "128Mi"
+      securityContext:
+        runAsUser: 101

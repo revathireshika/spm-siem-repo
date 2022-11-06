@@ -1,0 +1,74 @@
+{{- if (has "enrichment_store" .Values.enabled_apps) -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ include "siembol.enrichment_store.fullname" $ }}
+  name: {{ include "siembol.enrichment_store.fullname" $ }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "siembol.enrichment_store.fullname" $ }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ include "siembol.enrichment_store.fullname" $ }}
+      name: {{ include "siembol.enrichment_store.fullname" $ }}
+    spec:
+      containers:
+        - image: {{ .Values.enrichment_store.image.repository }}:{{ .Values.enrichment_store.image.tag }}
+          imagePullPolicy: {{ .Values.enrichment_store.image.pullPolicy }}
+          name: {{ include "siembol.enrichment_store.fullname" $ }}
+          env:
+          - name: APACHE_RUN_USER
+            value: "#82"
+          - name: APACHE_RUN_GROUP
+            value: "#82"
+          ports:
+            - containerPort: {{ .Values.enrichment_store.containerPort }}
+          securityContext:
+            runAsUser: {{ .Values.enrichment_store.securityContext.runAsUser }}
+          resources:
+            requests:
+              memory:  {{ .Values.enrichment_store.resources.requests.memory }}
+              cpu: {{ .Values.enrichment_store.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.enrichment_store.resources.limits.memory }}
+              cpu: {{ .Values.enrichment_store.resources.limits.cpu }}
+          volumeMounts:
+            - name: files
+              mountPath: /opt/files
+            - name: code
+              mountPath: /var/www/html
+            - name: config
+              mountPath: "/usr/local/etc/php/conf.d/upload.ini"
+              subPath: "php.ini-local"
+            - name: config
+              mountPath: "/etc/apache2/ports.conf"
+              subPath: "ports.conf"
+            - name: config
+              mountPath: "/etc/apache2/sites-enabled/000-default.conf"
+              subPath: "000-default.conf"
+      restartPolicy: Always
+      securityContext:
+        runAsUser: {{ .Values.enrichment_store.security.user }}
+        fsGroup: {{ .Values.enrichment_store.security.fsGroup }}
+        runAsGroup: {{ .Values.enrichment_store.security.runAsGroup }}
+      volumes:
+        - name: code
+          configMap:
+            name: php-files
+        - name: files
+          persistentVolumeClaim:
+            claimName: {{ .Values.enrichment_store.pvc.name }}
+        - name: config
+          configMap:
+            name: apache-conf
+  {{- end -}}

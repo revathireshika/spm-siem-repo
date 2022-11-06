@@ -1,0 +1,12 @@
+<div class="search-box">
+    <mat-icon>search</mat-icon>
+    <mat-form-field class="search-container" hintLabel="Search by name, author or labels">
+        <input matInput #searchBox [(ngModel)]="searchTerm" (keyup)="onSearch(searchTerm)" (keyup.escape)="onClearSearch()"/>
+        <button mat-button *ngIf="searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="onClearSearch()">
+            <mat-icon>close</mat-icon>
+        </button>
+        <button mat-button matSuffix mat-icon-button title="Save Search" (click)="onSaveSearch()">
+            <mat-icon>save</mat-icon>
+        </button>
+    </mat-form-field>
+</div>

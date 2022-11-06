@@ -1,0 +1,38 @@
+{
+    "environment": "demo",
+    "serviceRoot": "https://rest.siembol.local/",
+    "uiBootstrapPath": "./ui-bootstrap.json",
+    "authType": "disabled",
+    "historyMaxSize": 5,
+    "blockingTimeout": "30000",
+    "useImporters": true,
+    "homeLinks": [
+        {
+            "icon": "library_books",
+            "title": "Documentation",
+            "link": "https://github.com/G-Research/siembol/tree/main/docs"
+        },
+        {
+            "icon": "live_help",
+            "title": "Issues",
+            "link": "https://github.com/G-Research/siembol/issues"
+        },
+        {
+            "icon": "question_answer",
+            "title": "Discussions",
+            "link": "https://github.com/G-Research/siembol/discussions"
+        }
+    ],
+    "managementLinks": [
+        {
+            "title": "Storm UI",
+            "icon": "apps",
+            "link": "storm.siembol.local"
+        },
+        {
+            "title": "Enrichment Tables",
+            "icon": "table_chart",
+            "link": "enrichment.siembol.local"
+        }
+    ]
+}

@@ -1,0 +1,93 @@
+@use '@angular/material' as mat;
+@import '@angular/material/theming';
+@import 'material-icons/iconfont/material-icons.css';
+@import 'gr-palette';
+@import 'text-diff-style.scss';
+// Plus imports for other components in your app.
+
+// Include the base styles for Angular Material core. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue.
+$primary: mat.define-palette($mat-gr-blue);
+$accent: mat.define-palette(mat.$orange-palette);
+
+// The warn palette is optional (defaults to red).
+$warn: mat.define-palette(mat.$red-palette, 600);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$theme: mat.define-dark-theme($primary, $accent, $warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($theme);
+
+
+* {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: #303030;
+}
+
+@import "@ag-grid-community/core/dist/styles/ag-grid.css";
+@import "@ag-grid-community/core/dist/styles/ag-theme-alpine-dark/sass/ag-theme-alpine-dark-mixin.scss";
+
+
+.ag-theme-alpine-dark {
+  @include ag-theme-alpine-dark ((
+    background-color: ag-derived(odd-row-background-color, $mix: #303030 60% ),
+    odd-row-background-color: #444444,
+    header-background-color: #444444,
+    font-family: (Roboto, "Helvetica Neue", sans-serif),
+  ));
+  font-size: 15px;
+
+  .ag-root-wrapper {
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.3), 0px 1px 1px 0px rgba(0,0,0,0.18), 0px 1px 3px 0px rgba(0,0,0,0.14);
+  }
+
+  .ag-cell-focus, .ag-cell {
+    border: none !important;
+  }
+
+  .ag-row .ag-cell {
+    display: flex;
+    align-items: center;
+  }
+  
+  .ag-row .ag-cell-wrapper {
+    width: 100%
+  }
+  
+  .ag-cell-value {
+    width: 100%
+  }
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #868686;
+  transition: all 0.2s ease-in-out;
+  border-radius: 99px;
+}
+
+
+
+
